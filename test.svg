@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type="text/xsl" href="test.xsl" ?>
+<!-- data:image/svg+xml;charset=utf-8, ... -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="400" viewBox="0 0 400 400">
+    <rect x="0" y="0" width="400" height="400" fill="red" stroke="black" stroke-width="6"/>
+    <a xlink:href="https://developer.mozilla.org/">
+        <text x="10" y="25">MDN Web Docs</text>
+    </a>
+</svg>

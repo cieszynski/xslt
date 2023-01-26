@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type="text/xsl" href="test.xsl" ?>
+<!-- <svg xmlns="http://www.w3.org/2000/svg" xmlns:a="aaa" width="400" height="400" viewBox="0 0 400 400">
+    <rect x="0" y="0" width="400" height="400" fill="red" stroke="black" stroke-width="6" a:test="toast"/>
+    <a:A>aA<a>BB</a></a:A>
+</svg> -->
+<root xmlns:b="bbb"
+    xmlns="xxx"
+    xmlns:c="ccc"  xmlns:a="aaa" a:test="test" c:toast="toast">
+    <a:bla a:wert="wert">
+        <c:bla d:n="N" xmlns:d="ddd">
+            <a:blub x:peng="pong" x:bang="bum"
+                xmlns:x="yyy">chak</a:blub>
+        </c:bla>
+        <raat>boing</raat>
+    </a:bla>
+</root>

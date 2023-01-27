@@ -1,3 +1,8 @@
+<!-- 
+    xml-to-string by Stephan Cieszynski, 2023
+
+
+ -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
     <xsl:strip-space elements="*"/>
 
@@ -14,6 +19,19 @@
         <xsl:apply-templates mode="xml-to-string"/>
     </xsl:template>
 
+    <xsl:template name="xmlns">
+        <xsl:value-of select="' '"/>
+        <xsl:value-of select="'xmlns'"/>
+        <xsl:if test="not(name()=local-name())">
+            <xsl:value-of select="':'"/>
+            <xsl:value-of select="substring-before(name(.), ':')"/>
+        </xsl:if>
+        <xsl:value-of select="'='"/>
+        <xsl:value-of select="'&quot;'"/>
+        <xsl:value-of select="namespace-uri()"/>
+        <xsl:value-of select="'&quot;'"/>
+    </xsl:template>
+
     <xsl:template match="@*" mode="xml-to-string">
         <xsl:value-of select="' '"/>
         <xsl:value-of select="name(.)"/>
@@ -23,6 +41,10 @@
         <xsl:value-of select="'&quot;'"/>
     </xsl:template>
 
+    <xsl:template match="@*" mode="xml-to-string-xmlns">
+        <xsl:call-template name="xmlns"/>
+    </xsl:template>
+
     <xsl:template match="node()" mode="xml-to-string">
         <xsl:param name="ns"/>
 
@@ -30,35 +52,29 @@
         <xsl:value-of select="name(.)"/>
 
         <xsl:if test="string-length(namespace-uri()) and not(contains($ns, namespace-uri()))">
-            <xsl:value-of select="' xmlns'"/>
-            <xsl:if test="not(name()=local-name())">
-                <xsl:value-of select="':'"/>
-                <xsl:value-of select="substring-before(name(.), ':')"/>
-            </xsl:if>
-            <xsl:value-of select="'=&quot;'"/>
-            <xsl:value-of select="namespace-uri()"/>
-            <xsl:value-of select="'&quot;'"/>
+            <xsl:call-template name="xmlns"/>
         </xsl:if>
 
-        <xsl:for-each select="@*[namespace-uri() != namespace-uri(..) and generate-id() = generate-id(key('attribute-namespace-uri', namespace-uri()))]">
-            <xsl:if test="not(namespace-uri() = namespace-uri(..) or contains($ns, namespace-uri()))">
-                <xsl:value-of select="' xmlns'"/>
-                <xsl:value-of select="':'"/>
-                <xsl:value-of select="substring-before(name(.), ':')"/>
-                <xsl:value-of select="'=&quot;'"/>
-                <xsl:value-of select="namespace-uri()"/>
-                <xsl:value-of select="'&quot;'"/>
-            </xsl:if>
-        </xsl:for-each>
+        <!-- Add currently unknown attribute-namespaces to this node -->
+        <xsl:apply-templates mode="xml-to-string-xmlns" select="@*[
+            namespace-uri() != namespace-uri(..) and 
+            generate-id() = generate-id(
+                key('attribute-namespace-uri', namespace-uri())
+            )]"/>
 
         <xsl:apply-templates select="@*" mode="xml-to-string"/>
         <xsl:value-of select="'&gt;'"/>
 
         <xsl:apply-templates mode="xml-to-string">
             <xsl:with-param name="ns">
+                <!-- Add attribute-namespaces to namespaces-list -->
                 <xsl:variable name="new-namespaces">
-                    <xsl:for-each select="@*[namespace-uri() != namespace-uri(..) and generate-id() = generate-id(key('attribute-namespace-uri', namespace-uri()))]">
-                        <xsl:if test="not(namespace-uri() = namespace-uri(..) or contains($ns, namespace-uri()))">
+                    <xsl:for-each select="@*[
+                        namespace-uri() != namespace-uri(..) and 
+                        generate-id() = generate-id(
+                            key('attribute-namespace-uri', namespace-uri())
+                        )]">
+                        <xsl:if test="not(contains($ns, namespace-uri()))">
                             <xsl:value-of select="concat('-', namespace-uri())"/>
                         </xsl:if>
                     </xsl:for-each>

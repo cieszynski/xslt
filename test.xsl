@@ -2,7 +2,9 @@
     <xsl:import href="xml-to-string.xsl" />
 
     <xsl:template match="/">
-        <xsl:call-template name="xml-to-string"/>
+        <xsl:call-template name="xml-to-string">
+            <!-- <xsl:with-param name="node-set" select="document('test.svg')"/> -->
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:output method="text" indent="no"/>

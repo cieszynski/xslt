@@ -15,9 +15,9 @@
         </xsl:apply-templates>
     </xsl:template>
 
-    <xsl:template match="/">
+<!--     <xsl:template match="/">
         <xsl:apply-templates mode="xml-to-string"/>
-    </xsl:template>
+    </xsl:template> -->
 
     <xsl:template name="xmlns">
         <xsl:value-of select="' '"/>
